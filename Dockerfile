@@ -4,8 +4,16 @@ FROM eclipse-temurin:20-jdk AS build
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the local project files to the working directory in the container
-COPY . .
+# Copy the Maven wrapper and POM file
+COPY mvnw .
+COPY .mvn .mvn
+
+# Copy the rest of the project files to the working directory in the container
+COPY src src
+COPY pom.xml .
+
+# Make the Maven wrapper script executable
+RUN chmod +x mvnw
 
 # Build the application
 RUN ./mvnw clean package -DskipTests
